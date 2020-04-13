@@ -50,6 +50,8 @@
 
         <activity android:name=".activities.MainActivity"/>
 
+        <activity android:name=".activities.TestActivity"/>
+
         <activity android:name=".activities.MainBottomSheetActivity"/>
 
         <activity android:name=".login.LoginActivity">

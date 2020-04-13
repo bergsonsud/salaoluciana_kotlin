@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
     private fun navigationListner() {
         bottom_navigation.setOnNavigationItemSelectedListener {
             when(it.itemId) {
+                R.id.nav_test -> {
+                    startActivity(Intent(this,TestActivity::class.java))
+                    true
+                }
                 R.id.nav_home -> {
                     openFragment(HomeFragment())
                     true

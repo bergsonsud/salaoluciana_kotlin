@@ -4,6 +4,7 @@ import BottomSheetAddProduct
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,8 +22,12 @@ import com.example.salaoluciana.services.OrderService
 import com.example.salaoluciana.services.ProductService
 import com.example.salaoluciana.util.formataParaBr
 import kotlinx.android.synthetic.main.add_order_activity.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.android.synthetic.main.bottom_sheet_add_customer_content.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.math.absoluteValue
 
 
 class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
@@ -53,29 +58,19 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
             customers_list = CustomerService.instance.getCustomers()
         }
 
-
-
-
-
         setupItemsOrderAdapter()
         setupAddButton()
 
         fillSpinnerProductQuantity()
 
 
-
         GlobalScope.launch {
             startSetCustomer()
         }
 
+
+
     }
-
-    override fun onStart() {
-        super.onStart()
-       // startSetCustomer()
-    }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.salao_menu, menu)
@@ -84,7 +79,6 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         return when (item.itemId) {
             R.id.save -> {
                 saveOrder()
@@ -105,12 +99,14 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
     override fun SetCustomer(customer_id: Int) {
         selectedCustomerId=customer_id
         customer_name.text = customers_list[customer_id].name
+        icon_customer.visibility = View.VISIBLE
+        bottomSheetAddCustomer.dismiss()
 
+        startSetProducts()
     }
 
     private fun saveOrder() {
         var order : Order = Order(customers_list[selectedCustomerId!!.toInt()].user_id,total_value)
-
 
         OrderService.instance.addOrder(order){ success: Boolean, list ->
             if (success) {
@@ -126,8 +122,6 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
         }
 
     }
-
-
 
 
     private fun fillSpinnerProductQuantity() {
@@ -157,11 +151,15 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
 
     }
 
+    private fun startSetProducts() {
+        bottomSheetAddProduct = BottomSheetAddProduct(this,products_list,products)
+        bottomSheetAddProduct.show(supportFragmentManager, "BottomSheet")
+    }
+
 
     private fun setupAddButton() {
         btn_add_product.setOnClickListener {
-            bottomSheetAddProduct = BottomSheetAddProduct(this,products_list,products)
-            bottomSheetAddProduct.show(supportFragmentManager, "BottomSheet")
+            startSetProducts()
         }
 
         btn_set_customer.setOnClickListener {
@@ -178,25 +176,6 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
         order_total_value.text = total_value.formataParaBr()
     }
 
-
-
-
-    private fun getCustomersList2(): List<String> {
-        var customerslist : MutableList<String> = ArrayList()
-
-        CustomerService.instance.getData { success, list ->
-            customers_list = list
-            if (success) {
-                list.map {
-                    customerslist.add(it.name)
-                }
-            }
-
-        }
-
-        return customerslist
-
-    }
 
     private fun getProds() : MutableList<String>{
         var produts : MutableList<String> = ArrayList()
