@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:title="Home"
+        android:icon="@drawable/home"
+        />
+
+    <item
+        android:id="@+id/nav_new_order"
+        android:title="Nova Ordem"
+        android:icon="@drawable/nova_ordem"
+        />
+
+    <item
+        android:id="@+id/nav_user"
+        android:title="Usuario"
+        android:icon="@drawable/face"
+        />
+
+
+</menu>

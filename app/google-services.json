@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "355618996972",
+    "firebase_url": "https://salao-bc345.firebaseio.com",
+    "project_id": "salao-bc345",
+    "storage_bucket": "salao-bc345.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355618996972:android:352f708f0549cd094b5bc9",
+        "android_client_info": {
+          "package_name": "com.example.salaoluciana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355618996972-tt5pqnk7793rf4vkpp57bc0od4ke34lh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGXOiqab0gPOxmd7UXtUABA1u4IFoeZt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355618996972-tt5pqnk7793rf4vkpp57bc0od4ke34lh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">SalaoLuciana</string>
+    <string name="save">Salvar</string>
+    <string name="facebook_application_id">930015917413317</string>
+    <string name="facebook_app_id">930015917413317</string>
+    <string name="fb_login_protocol_scheme">fb930015917413317</string>
+
+
+
+
+        <string name="selected_item">Selected item:</string>
+
+        <string-array name="languages">
+            <item>Java</item>
+            <item>Kotlin</item>
+            <item>Swift</item>
+            <item>Python</item>
+            <item>Scala</item>
+            <item>Perl</item>
+        </string-array>
+
+
+</resources>
+
+

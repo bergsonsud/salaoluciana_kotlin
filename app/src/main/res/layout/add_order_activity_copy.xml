@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="12dp">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nova Ordem"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/select_customer"
+        android:text="Selecione cliente"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Spinner
+        android:id="@+id/customers_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <Button
+        android:id="@+id/btn_addproduto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adionar produto"
+        />
+
+
+    <Button
+        android:id="@+id/add_customer_button"
+        android:text="Adicionar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+<GridLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+   <GridLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:orientation="vertical">
+       <TextView
+           android:id="@+id/select_product"
+           android:text="Produto"
+           android:layout_marginTop="24dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"/>
+       <Spinner
+           android:id="@+id/products_spinner"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"/>
+   </GridLayout>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/select_product_quantity"
+        android:text="Quantidade"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Spinner
+        android:id="@+id/products_quantity_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    </GridLayout>
+    <Button
+        android:id="@+id/add_product_button"
+        android:text="Adicionar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"/>
+</GridLayout>
+
+    <TextView
+        android:id="@+id/total"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:text="Valor total"
+        />
+
+    <TextView
+        android:id="@+id/order_total_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="R$ 0,00"
+        android:textSize="32sp"
+        />
+    <TextView
+        android:id="@+id/recycle_view_titulo"
+        android:text="Produtos selecionados"
+        android:textSize="20sp"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/products_order_recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>
