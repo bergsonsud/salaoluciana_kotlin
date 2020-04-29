@@ -1,13 +1,16 @@
 package com.example.salaoluciana.services
 
 
+import android.util.Log
 import com.example.salaoluciana.models.Customer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 class CustomerService private constructor() {
+    lateinit var querySnapshotNames : QuerySnapshot
 
     companion object {
         val instance: CustomerService by lazy { CustomerService() }
@@ -56,13 +59,23 @@ class CustomerService private constructor() {
         return names
     }
 
-    suspend fun getCustomersName(): List<String> {
-        var querySnapshot = db.collection("customers").
-        whereEqualTo("user_id",getUId()).get().await()
+    suspend fun getCustomersName(s : CharSequence?): List<String> {
+        if (s.isNullOrEmpty()) {
+            querySnapshotNames = db.collection("customers").
+            whereEqualTo("user_id",getUId()).get().await()
+        }
 
-        return querySnapshot?.map {
+        else{
+            s.let {
+                querySnapshotNames = db.collection("customers").orderBy("name")
+                    .startAt(s.toString().decapitalize()) .endAt(s.toString().decapitalize()+"\uf8ff")
+                    .get().await()
+            }
+        }
+
+        return querySnapshotNames?.map {
             it.toObject(Customer::class.java).name
-        } ?: listOf()
+        }
     }
 
 

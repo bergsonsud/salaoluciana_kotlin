@@ -58,7 +58,6 @@ class AddCustomerActivity : AppCompatActivity() {
     private fun createCustomer(nome: String, phone: String){
 
         var service : CustomerService = CustomerService.instance
-
         var customer = Customer(service.getUId().toString(),nome,phone)
 
         service.addCustomer(customer){ sucess ->

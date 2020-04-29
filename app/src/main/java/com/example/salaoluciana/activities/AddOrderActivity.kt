@@ -63,10 +63,10 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
 
         fillSpinnerProductQuantity()
 
-
-        GlobalScope.launch {
-            startSetCustomer()
-        }
+//
+//        GlobalScope.launch {
+//            startSetCustomer()
+//        }
 
 
 
@@ -144,9 +144,9 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
 
     private suspend fun startSetCustomer() {
         withContext(Dispatchers.IO) {
-            customers = CustomerService.instance.getCustomersName()
+            customers = CustomerService.instance.getCustomersName(null)
         }
-        bottomSheetAddCustomer = BottomSheetAddCustomer(this@AddOrderActivity, customers)
+        bottomSheetAddCustomer = BottomSheetAddCustomer(this@AddOrderActivity, customers, customers_list)
         bottomSheetAddCustomer.show(supportFragmentManager, "BottomSheetAddCustomer")
 
     }

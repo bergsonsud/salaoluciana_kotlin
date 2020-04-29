@@ -1,8 +1,9 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.AddOrderActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,6 +13,8 @@
 
         <!-- Content -->
 
+
+
     </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
@@ -19,11 +22,13 @@
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:behavior_peekHeight="300dp"
+        app:behavior_peekHeight="600dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:cardBackgroundColor="#eee"
         app:cardCornerRadius="0dp"
         app:cardElevation="5dp">
+
+
 
         <include layout="@layout/bottom_sheet_add_customer_content"/>
     </com.google.android.material.card.MaterialCardView>
