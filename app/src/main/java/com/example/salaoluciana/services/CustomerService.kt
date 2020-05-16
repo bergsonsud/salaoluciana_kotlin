@@ -3,10 +3,11 @@ package com.example.salaoluciana.services
 
 import android.util.Log
 import com.example.salaoluciana.models.Customer
+import com.example.salaoluciana.util.capitalizeWords
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
-import kotlinx.coroutines.*
+import kotlinx.coroutines.plus
 import kotlinx.coroutines.tasks.await
 
 class CustomerService private constructor() {
@@ -66,11 +67,9 @@ class CustomerService private constructor() {
         }
 
         else{
-            s.let {
-                querySnapshotNames = db.collection("customers").orderBy("name")
-                    .startAt(s.toString().decapitalize()) .endAt(s.toString().decapitalize()+"\uf8ff")
-                    .get().await()
-            }
+            querySnapshotNames = db.collection("customers").orderBy("name")
+                .startAt(s.toString().capitalizeWords()).endAt(s.toString().capitalizeWords() + "\uf8ff")
+                .get().await()
         }
 
         return querySnapshotNames?.map {
@@ -79,14 +78,26 @@ class CustomerService private constructor() {
     }
 
 
-    suspend fun getCustomers(): List<Customer> {
-        var querySnapshot = db.collection("customers").
-        whereEqualTo("user_id",getUId()).get().await()
+    suspend fun getCustomers(s : CharSequence?): List<Customer> {
+        if (s.isNullOrEmpty()) {
+            querySnapshotNames = db.collection("customers").
+            whereEqualTo("user_id",getUId()).get().await()
+        }
 
-        return querySnapshot?.map {
-            it.toObject(Customer::class.java)
+        else{
+            s.let {
+                querySnapshotNames = db.collection("customers").orderBy("name").
+                startAt(s.toString().capitalizeWords()).endAt(s.toString().capitalizeWords() + "\uf8ff").get().await()
+            }
+        }
+
+        return querySnapshotNames?.map {
+            val customer = it.toObject(Customer::class.java)
+            customer.id = it.id
+            customer
         } ?: listOf()
     }
+
 
     fun getData(completion: ((Boolean, List<Customer>) -> Unit)) {
 

@@ -19,7 +19,7 @@
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:behavior_peekHeight="150dp"
+        app:behavior_peekHeight="600dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:cardBackgroundColor="#eee"
         app:cardCornerRadius="0dp"

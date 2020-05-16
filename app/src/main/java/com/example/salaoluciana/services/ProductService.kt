@@ -1,10 +1,14 @@
 package com.example.salaoluciana.services
 
+import com.example.salaoluciana.models.Customer
 import com.example.salaoluciana.models.Product
+import com.example.salaoluciana.util.capitalizeWords
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.tasks.await
 
 class ProductService private constructor(){
 
@@ -30,6 +34,34 @@ class ProductService private constructor(){
     fun getData(param: (Any, Any) -> Unit): Task<QuerySnapshot> {
         return db.collection("Products").get()
     }
+
+
+    suspend fun searchByName(s: String) : QuerySnapshot{
+        return db.collection("products")
+            .orderBy("name").startAt(s.toString().capitalizeWords())
+            .endAt(s.toString().capitalizeWords() + "\uf8ff").get().await()
+    }
+
+
+    suspend fun getProducts(s: CharSequence?) : List<Product>{
+        return searchByName(s.toString()).let{
+                it.map {
+                    var product = it.toObject(Product::class.java)
+                    product.id = it.id
+                    product
+                }
+        }
+    }
+
+
+    suspend fun getProductsName(s : CharSequence?) : List<String> {
+        return searchByName(s.toString()).let {
+            it.map {
+                it.toObject(Product::class.java).name
+            }
+        }
+    }
+
 
     fun getDataSnapshotListener(completion: ((Boolean, List<Product>)-> Unit)){
         db.collection("products")

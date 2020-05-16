@@ -23,4 +23,16 @@ class ItemOrderService private constructor(){
         }
 
     }
+
+
+    suspend fun addItems(orderId: String, items_order: ArrayList<ItemOrder>, completion: (success: Boolean) -> Unit){
+        for (io in items_order){
+            io.order_id = orderId
+            db.collection("items_orders").add(io).addOnSuccessListener {
+                completion(true)
+            }.addOnFailureListener{
+                completion(false)
+            }
+        }
+    }
 }

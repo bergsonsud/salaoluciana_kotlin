@@ -10,3 +10,6 @@ fun Float.formataParaBr() : String {
 }
 
 
+fun String.capitalizeWords(): String = split(" ").map { it.toLowerCase().capitalize() }.joinToString(" ")
+
+

@@ -14,17 +14,20 @@ import com.example.salaoluciana.interfaces.BottomSheetInterface
 import com.example.salaoluciana.models.Customer
 import com.example.salaoluciana.services.CustomerService
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.api.CustomHttpPatternOrBuilder
 import kotlinx.android.synthetic.main.bottom_sheet_add_customer_content.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.suspendCoroutine
 
 
-class BottomSheetAddCustomer(var bottomSheetInterface: BottomSheetInterface, var customers : List<String>, var customer_list : List<Customer>) : BottomSheetDialogFragment(), CoroutineScope {
+class BottomSheetAddCustomer(var bottomSheetInterface: BottomSheetInterface, var customers : List<String>) : BottomSheetDialogFragment(), CoroutineScope {
     var selectedCustomerId : Int? = null
+    var selectedPosition : Int? = null
     lateinit var data : List<String>
+    lateinit var customer_list : List<Customer>
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main
 
@@ -38,12 +41,9 @@ class BottomSheetAddCustomer(var bottomSheetInterface: BottomSheetInterface, var
 
     override fun onStart() {
         super.onStart()
-        fillSpinnerCustomers()
         setupSetButton()
        // setupAutocomplete()
         setupautocompletedb()
-
-
     }
 
 
@@ -66,6 +66,7 @@ class BottomSheetAddCustomer(var bottomSheetInterface: BottomSheetInterface, var
 
     private fun setupautocompletedb() {
 
+        customers = listOf()
         var adapter = setupArray(customers)
         autocompletetextview.setAdapter(adapter)
 
@@ -77,10 +78,19 @@ class BottomSheetAddCustomer(var bottomSheetInterface: BottomSheetInterface, var
                 count: Int
             ) {
                 launch {
+
                     withContext(IO) {
+                        customer_list = CustomerService.instance.getCustomers(s)
                         customers = CustomerService.instance.getCustomersName(s)
                     }
-                    adapter.notifyDataSetChanged()
+                    withContext(Dispatchers.Main){
+                        adapter.clear()
+                        customers.map {
+                            adapter.add(it)
+                        }
+                        adapter.notifyDataSetChanged()
+                    }
+
                 }
 
             }
@@ -95,42 +105,17 @@ class BottomSheetAddCustomer(var bottomSheetInterface: BottomSheetInterface, var
 
             override fun afterTextChanged(s: Editable) {}
         })
+
+        autocompletetextview.setOnItemClickListener { parent, view, position, id ->
+            val vo = parent.getItemAtPosition(position)
+            selectedPosition = position
+        }
     }
 
     private fun setupSetButton() {
         set_customer_button.setOnClickListener {
-            bottomSheetInterface.SetCustomer(selectedCustomerId!!)
+            bottomSheetInterface.SetCustomer(customer_list[selectedPosition!!])
         }
     }
-
-
-    private fun fillSpinnerCustomers() {
-        val customersAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            context!!.applicationContext,
-            R.layout.support_simple_spinner_dropdown_item,
-            customers
-        )
-
-
-        customersAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
-        customer_spinner.adapter = customersAdapter
-        customer_spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-               selectedCustomerId = position
-            }
-        }
-        )
-
-    }
-
 
 }

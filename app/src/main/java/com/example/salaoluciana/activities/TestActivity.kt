@@ -6,7 +6,10 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.salaoluciana.R
+import com.example.salaoluciana.models.Order
 import com.example.salaoluciana.services.CustomerService
+import com.example.salaoluciana.services.OrderService
+import com.google.firestore.v1.StructuredQuery
 import kotlinx.android.synthetic.main.activity_test.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -17,6 +20,7 @@ import kotlinx.coroutines.withContext
 class TestActivity : AppCompatActivity() {
 
     var customers : List<String> = arrayListOf()
+    lateinit var orders : List<Order>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +30,15 @@ class TestActivity : AppCompatActivity() {
         test_activity.setOnClickListener {
             Log.i("asd","tela tocada")
         }
+
+
+
+        OrderService.instance.getOrders{sucess, list ->
+            if (sucess) {
+                orders = list
+            }
+        }
+
 
 
         GlobalScope.launch {

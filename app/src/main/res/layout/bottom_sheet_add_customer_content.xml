@@ -30,23 +30,6 @@
         android:layout_marginTop="40dp"
         android:padding="8dp">
 
-
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/select_product"
-                android:text="Cliente"
-                android:layout_marginTop="24dp"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"/>
-            <Spinner
-                android:id="@+id/customer_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </GridLayout>
-
         <Button
             android:id="@+id/set_customer_button"
             android:text="Confirmar"

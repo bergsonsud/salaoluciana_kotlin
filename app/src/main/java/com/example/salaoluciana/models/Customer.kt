@@ -4,8 +4,10 @@ import com.google.firebase.firestore.Exclude
 import java.io.Serializable
 
 class Customer: Serializable {
-    @Exclude
-    var id: String? = null
+    //@Exclude
+    //var id: String? = null
+    @get:Exclude
+    var id: String = ""
     var user_id: String
     var name: String
     var phone: String

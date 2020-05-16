@@ -2,6 +2,7 @@ package com.example.salaoluciana.activities
 
 import BottomSheetAddProduct
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,23 +22,25 @@ import com.example.salaoluciana.services.ItemOrderService
 import com.example.salaoluciana.services.OrderService
 import com.example.salaoluciana.services.ProductService
 import com.example.salaoluciana.util.formataParaBr
+import com.google.firebase.firestore.DocumentReference
 import kotlinx.android.synthetic.main.add_order_activity.*
-import kotlinx.android.synthetic.main.bottom_sheet_add_customer_content.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.math.absoluteValue
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlin.coroutines.CoroutineContext
 
 
-class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
+class AddOrderActivity : AppCompatActivity(), BottomSheetInterface, CoroutineScope {
+    override val coroutineContext: CoroutineContext = Dispatchers.Main
 
     var products_order : ArrayList<Product> = arrayListOf()
     var items_order : ArrayList<ItemOrder> = arrayListOf()
     lateinit var items_order_adapter : ItemsOrderAdapter
     lateinit var bottomSheetAddProduct: BottomSheetAddProduct
     lateinit var bottomSheetAddCustomer: BottomSheetAddCustomer
-    var selectedCustomerId : Int? = null
+    var selectedCustomerId : String? = null
+    lateinit var selectedCustomer : Customer
+    lateinit var orderId: String
+    var orderid : Int? = 0
     var customers: List<String> = arrayListOf()
     var products: MutableList<String> = arrayListOf()
     lateinit var products_list : List<Product>
@@ -53,21 +56,9 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
         setContentView(R.layout.add_order_activity)
 
         products = getProds()
-
-        GlobalScope.launch(Dispatchers.IO) {
-            customers_list = CustomerService.instance.getCustomers()
-        }
-
         setupItemsOrderAdapter()
         setupAddButton()
-
         fillSpinnerProductQuantity()
-
-//
-//        GlobalScope.launch {
-//            startSetCustomer()
-//        }
-
 
 
     }
@@ -91,33 +82,51 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
 
     override fun AddProduct(product: Product, quantity: Int) {
         products_order.add(product)
-        items_order.add(ItemOrder(product.id!!,product.value,quantity))
+        items_order.add(ItemOrder("",product.id!!,product.value,quantity))
         setupItemsOrderAdapter()
         sumProducts()
     }
 
-    override fun SetCustomer(customer_id: Int) {
-        selectedCustomerId=customer_id
-        customer_name.text = customers_list[customer_id].name
+    override fun SetCustomer(customer: Customer) {
+        selectedCustomer = customer
+        selectedCustomerId=customer.id
+        customer_name.text = customer.name
         icon_customer.visibility = View.VISIBLE
         bottomSheetAddCustomer.dismiss()
 
         startSetProducts()
     }
 
+
+    override fun NewProduct() {
+        bottomSheetAddProduct.dismiss()
+        startSetProducts()
+    }
+
     private fun saveOrder() {
-        var order : Order = Order(customers_list[selectedCustomerId!!.toInt()].user_id,total_value)
+        var order : Order = Order(selectedCustomer.id,total_value)
 
-        OrderService.instance.addOrder(order){ success: Boolean, list ->
-            if (success) {
-                orders_list = list
-            }
-        }
 
-        ItemOrderService.instace.add(orders_list.last(),items_order) {success: Boolean ->
-            if (success) {
-                finish()
+
+        launch {
+            withContext(IO){
+                OrderService.instance.addOrder(order){ success: Boolean, order, doc_ref ->
+                    if (success) {
+                        //orders_list = list
+                        orderId = doc_ref.id
+                        finish()
+                    }
+                }
             }
+
+            withContext(IO){
+               ItemOrderService.instace.addItems(orderId,items_order) {success ->
+                   if (success) {
+                       finish()
+                   }
+               }
+            }
+
 
         }
 
@@ -146,7 +155,7 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface {
         withContext(Dispatchers.IO) {
             customers = CustomerService.instance.getCustomersName(null)
         }
-        bottomSheetAddCustomer = BottomSheetAddCustomer(this@AddOrderActivity, customers, customers_list)
+        bottomSheetAddCustomer = BottomSheetAddCustomer(this@AddOrderActivity, customers)
         bottomSheetAddCustomer.show(supportFragmentManager, "BottomSheetAddCustomer")
 
     }
