@@ -104,7 +104,7 @@ class AddOrderActivity : AppCompatActivity(), BottomSheetInterface, CoroutineSco
     }
 
     private fun saveOrder() {
-        var order : Order = Order(selectedCustomer.id,total_value)
+        var order : Order = Order(selectedCustomer.id,selectedCustomer.name,total_value)
 
 
 

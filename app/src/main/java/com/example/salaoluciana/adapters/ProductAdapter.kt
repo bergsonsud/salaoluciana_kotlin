@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.salaoluciana.R
 import com.example.salaoluciana.interfaces.SalaoAdapterInterface
 import com.example.salaoluciana.models.Product
+import com.example.salaoluciana.util.formataParaBr
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_order_row.*
 
@@ -24,7 +25,7 @@ class ProductAdapter(var salaoAdapterInterface: SalaoAdapterInterface,var contex
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         holder.name.text = products[position].name
-        holder.value.text = products[position].value.toString()
+        holder.value.text = products[position].value.formataParaBr()
 
         holder.containerView.setOnClickListener(holder)
         holder.containerView.setOnLongClickListener(holder)

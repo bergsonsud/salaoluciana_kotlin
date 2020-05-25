@@ -3,6 +3,7 @@ package com.example.salaoluciana.services
 import android.util.Log
 import com.example.salaoluciana.models.Customer
 import com.example.salaoluciana.models.Order
+import com.example.salaoluciana.models.Product
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -14,6 +15,26 @@ class OrderService private constructor(){
 
     val db = FirebaseFirestore.getInstance()
 
+    fun getDataSnapshotListener(completion: ((Boolean, List<Order>)-> Unit)){
+        db.collection("orders")
+            .addSnapshotListener { querySnapshot, error ->
+                querySnapshot.let {
+                    val orders = querySnapshot!!.map {
+                        var order = it.toObject(Order::class.java)
+                        order.id = it.id
+                        order
+                    }
+
+                    completion(true, orders)
+
+
+                }
+
+                error.let {
+                    completion(false, arrayListOf())
+                }
+            }
+    }
 
     fun getOrders(completion: (sucess: Boolean, List<Order>) -> Unit) {
         db.collection("orders").addSnapshotListener{ querySnapshot, exception ->

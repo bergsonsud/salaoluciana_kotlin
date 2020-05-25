@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.salaoluciana.fragments.CustomerListFragment
+import com.example.salaoluciana.fragments.OrderListFragment
 import com.example.salaoluciana.fragments.ProductListFragment
 
 class MainAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -14,21 +15,25 @@ class MainAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
             0 -> {
                 CustomerListFragment()
             }
+            1 -> {
+                ProductListFragment()
+            }
             else -> {
-                return ProductListFragment()
+                return OrderListFragment()
             }
         }
     }
 
     override fun getCount(): Int {
-        return 2
+        return 3
     }
 
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when(position){
             0 -> "Clientes"
-            else -> "Produtos"
+            1 -> "Produtos"
+            else -> "Ordens"
         }
     }
 }
